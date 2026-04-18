@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - Smart Door Lock System</title>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+    <!-- Ionicons -->
+    <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
+    <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
+
+    <!-- Force Stunning Styles to bypass Cache -->
+    <style>
+        .auth-body {
+            background: linear-gradient(135deg, #1e3a8a 0%, #3b82f6 100%) !important;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+        .auth-card {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(15px);
+            padding: 20px 25px;
+            border-radius: 20px;
+            box-shadow: 0 25px 60px rgba(0,0,0,0.3) !important;
+            width: 100%;
+            max-width: 420px;
+            margin: auto;
+        }
+        .auth-header h2 {
+            font-size: 24px;
+            font-weight: 700;
+            color: #0f172a;
+            margin-bottom: 5px;
+        }
+        .auth-header p {
+            font-size: 14px;
+            color: #64748b;
+        }
+        .input-with-icon {
+            position: relative;
+            width: 100%;
+        }
+        .input-with-icon input {
+            height: 50px !important;
+            padding: 10px 45px 10px 45px !important;
+            font-size: 15px !important;
+            border-radius: 10px !important;
+            border: 1px solid #cbd5e1 !important;
+            background: #f8fafc !important;
+            width: 100%;
+            transition: all 0.3s ease;
+            box-sizing: border-box !important;
+        }
+        .input-with-icon input:focus {
+            border-color: #3b82f6 !important;
+            box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.2) !important;
+        }
+        .input-with-password input {
+            padding-right: 45px !important;
+        }
+        .input-with-icon > ion-icon {
+            position: absolute;
+            left: 15px !important;
+            top: 50% !important;
+            transform: translateY(-50%) !important;
+            font-size: 20px !important;
+            color: #94a3b8 !important;
+            z-index: 10;
+        }
+        .toggle-password-btn {
+            position: absolute !important;
+            right: 2px !important;
+            top: 50% !important;
+            transform: translateY(-50%) !important;
+            background: transparent !important;
+            border: none !important;
+            height: 46px !important;
+            width: 40px !important;
+            display: flex !important;
+            align-items: center !important;
+            justify-content: center !important;
+            cursor: pointer !important;
+            z-index: 15 !important;
+            border-radius: 8px !important;
+        }
+        .toggle-password-btn ion-icon {
+            font-size: 22px !important;
+            color: #94a3b8 !important;
+        }
+        .toggle-password-btn:hover ion-icon {
+            color: #3b82f6 !important;
+        }
+        .auth-btn {
+            height: 50px;
+            width: 100%;
+            font-size: 16px;
+            font-weight: 600;
+            border-radius: 10px;
+            background: #3b82f6 !important;
+            border: none;
+            color: white;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(59,130,246,0.2) !important;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            cursor: pointer;
+        }
+        .auth-btn:hover {
+            background: #2563eb !important;
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(59,130,246,0.4) !important;
+        }
+        .form-group {
+            margin-bottom: 12px;
+        }
+        .form-group label {
+            font-size: 13px;
+            font-weight: 600;
+            color: #334155;
+            margin-bottom: 4px;
+            display: block;
+        }
+        .auth-toggle {
+            background: #f1f5f9;
+            border-radius: 12px;
+            padding: 4px;
+            display: flex;
+            margin-bottom: 18px;
+        }
+        .auth-toggle button {
+            flex: 1;
+            font-size: 14px;
+            font-weight: 600;
+            padding: 8px;
+            border-radius: 8px;
+            border: none;
+            cursor: pointer;
+            background: transparent;
+            color: #64748b;
+            transition: all 0.3s ease;
+        }
+        .auth-toggle button.active {
+            background: #ffffff;
+            color: #3b82f6;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+    </style>
+</head>
+<body class="auth-body">
+    <div class="auth-container">
+        <div class="auth-card">
+            <div class="auth-header" style="margin-top: 0; margin-bottom: 15px;">
+                <div style="display:flex; justify-content:center; gap: 15px; margin-bottom: 10px;">
+                    <div style="width: 36px; height: 36px; border-radius: 50%; background: rgba(79, 70, 229, 0.1); display: flex; align-items: center; justify-content: center; color: var(--primary); font-size: 20px;">
+                        <ion-icon name="finger-print-outline"></ion-icon>
+                    </div>
+                    <div style="width: 36px; height: 36px; border-radius: 50%; background: rgba(16, 185, 129, 0.1); display: flex; align-items: center; justify-content: center; color: var(--success); font-size: 20px;">
+                        <ion-icon name="card-outline"></ion-icon>
+                    </div>
+                </div>
+                <h2 style="font-size: 20px; margin:0;">SmartLock System</h2>
+                <p style="margin: 0; font-size: 13px;">Authenticate to access the dashboard</p>
+            </div>
+            
+            <div class="auth-toggle">
+                <button type="button" class="active" id="btn-show-login">Log In</button>
+                <button type="button" id="btn-show-signup">Sign Up</button>
+            </div>
+
+            <form id="auth-form">
+                <!-- Signup Only Fields -->
+                <div class="form-group slide-up" id="name-group" style="display:none;">
+                    <label>Admin Full Name</label>
+                    <div class="input-with-icon">
+                        <ion-icon name="person-outline"></ion-icon>
+                        <input type="text" id="auth-name" placeholder="E.g. John Doe">
+                    </div>
+                </div>
+                <div class="form-group slide-up" id="device-group" style="display:none; margin-top:20px;">
+                    <label>Device Serial Key Name</label>
+                    <div class="input-with-icon">
+                        <ion-icon name="hardware-chip-outline"></ion-icon>
+                        <input type="text" id="auth-device" placeholder="E.g. SmartDoor_001">
+                    </div>
+                </div>
+
+                <!-- Generic Fields -->
+                <div class="form-group slide-up">
+                    <label>Email Address</label>
+                    <div class="input-with-icon">
+                        <ion-icon name="mail-outline"></ion-icon>
+                        <input type="email" id="auth-email" required placeholder="admin@domain.com">
+                    </div>
+                </div>
+                <div class="form-group slide-up">
+                    <label>Password</label>
+                    <div class="input-with-icon input-with-password">
+                        <ion-icon name="lock-closed-outline"></ion-icon>
+                        <input type="password" id="auth-password" required placeholder="••••••••" minlength="6">
+                        <button type="button" class="toggle-password-btn" id="btn-toggle-pwd">
+                            <ion-icon name="eye-off-outline" id="pwd-icon"></ion-icon>
+                        </button>
+                    </div>
+                </div>
+
+                <div style="text-align: right; margin-bottom: 25px;">
+                    <a href="#" id="btn-forgot-password" style="font-size: 13px; color: var(--text-muted); text-decoration: none; font-weight: 500;">Forgot Password?</a>
+                </div>
+                
+                <div class="auth-error" id="auth-error"></div>
+
+                <button type="submit" class="btn btn-primary auth-btn" id="auth-submit">
+                    <ion-icon name="log-in-outline"></ion-icon> Login Securely
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Load Auth Logic -->
+    <script type="module" src="js/auth.js"></script>
+
+    <!-- Password Toggle Script -->
+    <script>
+        document.getElementById('btn-toggle-pwd').addEventListener('click', function() {
+            const pwdInput = document.getElementById('auth-password');
+            const pwdIcon = document.getElementById('pwd-icon');
+            if (pwdInput.type === 'password') {
+                pwdInput.type = 'text';
+                pwdIcon.name = 'eye-outline';
+            } else {
+                pwdInput.type = 'password';
+                pwdIcon.name = 'eye-off-outline';
+            }
+        });
+    </script>
+</body>
+</html>
