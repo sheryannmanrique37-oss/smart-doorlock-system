@@ -7,13 +7,12 @@ import { getDatabase } from "https://www.gstatic.com/firebasejs/10.9.0/firebase-
 // Replace the config below with your actual Firebase Web SDK details
 // ============================================
 export const firebaseConfig = {
-  apiKey: "AIzaSyBPo6816mnmSG9T3fvx5rRa9w2o5EO1m4I",
-  authDomain: "water-level-monitoring-12caa.firebaseapp.com",
-  databaseURL: "https://water-level-monitoring-12caa-default-rtdb.asia-southeast1.firebasedatabase.app",
-  projectId: "water-level-monitoring-12caa",
-  storageBucket: "water-level-monitoring-12caa.firebasestorage.app",
-  messagingSenderId: "26182334762",
-  appId: "1:26182334762:web:f363d3f51a879be3eb4653"
+  apiKey: "AIzaSyDCg7yfWQJcEO1RWFfOelTPrZmIojn1v7w",
+  authDomain: "smart-doorlock-system.firebaseapp.com",
+  projectId: "smart-doorlock-system",
+  storageBucket: "smart-doorlock-system.firebasestorage.app",
+  messagingSenderId: "566488612508",
+  appId: "1:566488612508:web:41c810eced6e23670fb759"
 };
 
 // Initialize Firebase Export Variables
