@@ -24,6 +24,11 @@ document.addEventListener("DOMContentLoaded", () => {
     menuItems.forEach(item => {
         item.addEventListener('click', (e) => {
             e.preventDefault();
+            // Request push notification permission upon user gesture
+            if (Notification && Notification.permission !== "granted" && Notification.permission !== "denied") {
+                Notification.requestPermission();
+            }
+            
             menuItems.forEach(m => m.classList.remove('active'));
             sections.forEach(s => s.classList.remove('active'));
             
@@ -168,6 +173,31 @@ document.addEventListener("DOMContentLoaded", () => {
     initEnrollModal();
     // === END OTA ENROLL ===
     
+    // === REMOTE MANUAL UNLOCK LOGIC ===
+    const btnManualUnlock = document.getElementById('btn-manual-unlock');
+    if (btnManualUnlock) {
+        btnManualUnlock.addEventListener('click', async () => {
+            if (confirm("Are you sure you want to manually unlock the door?")) {
+                try {
+                    btnManualUnlock.innerHTML = '<ion-icon name="sync-outline" class="pulse-icon"></ion-icon> Opening...';
+                    btnManualUnlock.disabled = true;
+                    
+                    await set(ref(db, 'system_state/manual_unlock'), true);
+                    
+                    setTimeout(() => {
+                        btnManualUnlock.innerHTML = '<ion-icon name="lock-open-outline"></ion-icon> Admin Manual Unlock';
+                        btnManualUnlock.disabled = false;
+                        alert("Unlock command broadcasted to the door!");
+                    }, 3000);
+                } catch(e) {
+                    alert("Error triggering unlock: " + e.message);
+                    btnManualUnlock.innerHTML = '<ion-icon name="lock-open-outline"></ion-icon> Admin Manual Unlock';
+                    btnManualUnlock.disabled = false;
+                }
+            }
+        });
+    }
+    
     // === REMOTE RFID ENROLL LOGIC ===
     const btnRemoteRfid = document.getElementById('btn-remote-rfid');
     if(btnRemoteRfid) {
@@ -177,7 +207,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 await set(ref(db, 'system_state/last_scanned_rfid'), "");
                 
                 let attempts = 0;
-                btnRemoteRfid.innerHTML = '<ion-icon name="sync-outline" class="pulse-icon"></ion-icon> Scanning...';
+                btnRemoteRfid.innerHTML = '<ion-icon name="sync-outline" class="pulse-icon"></ion-icon> Scan Now...';
                 btnRemoteRfid.disabled = true;
                 
                 const pollTimer = setInterval(async () => {
@@ -188,24 +218,22 @@ document.addEventListener("DOMContentLoaded", () => {
                         clearInterval(pollTimer);
                         await set(ref(db, 'system_state/last_scanned_rfid'), ""); // flush
                         
-                        btnRemoteRfid.innerHTML = '<ion-icon name="card-outline"></ion-icon> Scan RFID on Door';
+                        btnRemoteRfid.innerHTML = '<ion-icon name="wifi-outline"></ion-icon> Scan Card Directly';
                         btnRemoteRfid.disabled = false;
                         
-                        document.getElementById('btn-add-user').click();
                         document.getElementById('inp-uid').value = scannedUid;
                         document.getElementById('inp-type').value = 'rfid';
-                        alert('Success! RFID Card ' + scannedUid + ' was captured by the door securely and autofilled for you.');
                     } else if (attempts > 20) { // 20 secs
                         clearInterval(pollTimer);
                         await set(ref(db, 'system_state/enroll_rfid_target'), "false");
-                        btnRemoteRfid.innerHTML = '<ion-icon name="card-outline"></ion-icon> Scan RFID on Door';
+                        btnRemoteRfid.innerHTML = '<ion-icon name="wifi-outline"></ion-icon> Scan Card Directly';
                         btnRemoteRfid.disabled = false;
                         alert('Scanner timed out. No card was presented at the door.');
                     }
                 }, 1000);
             } catch(e) {
                 alert("Error triggering remote scanner: " + e.message);
-                btnRemoteRfid.innerHTML = '<ion-icon name="card-outline"></ion-icon> Scan RFID on Door';
+                btnRemoteRfid.innerHTML = '<ion-icon name="wifi-outline"></ion-icon> Scan Card Directly';
                 btnRemoteRfid.disabled = false;
             }
         });
@@ -214,8 +242,41 @@ document.addEventListener("DOMContentLoaded", () => {
     // Initial fetch / Subscribe to Realtime Updates
     window.fetchUsers();
     window.listenToLogs();
+
+    // Alarm System Listener
+    const alarmOverlay = document.getElementById('alarm-overlay');
+    const btnResetAlarm = document.getElementById('btn-reset-alarm');
     
+    onValue(ref(db, 'system_state/alarm_active'), (snap) => {
+        if (snap.val() === true) {
+            if(alarmOverlay) alarmOverlay.classList.add('active');
+        } else {
+            if(alarmOverlay) alarmOverlay.classList.remove('active');
+        }
+    });
+
+    if (btnResetAlarm) {
+        btnResetAlarm.addEventListener('click', async () => {
+            btnResetAlarm.innerHTML = '<ion-icon name="sync"></ion-icon> Resetting...';
+            await set(ref(db, 'system_state/reset_alarm'), true);
+            setTimeout(() => {
+                btnResetAlarm.innerHTML = '<ion-icon name="power-outline"></ion-icon> RESET ALARM SYSTEM';
+            }, 2000); // Overlay disappears due to onValue listener cleanly!
+        });
+    }
+
     document.getElementById('btn-refresh-logs').addEventListener('click', () => { window.listenToLogs() });
+    
+    // Clear Logs function binding
+    const btnClearLogs = document.getElementById('btn-clear-logs');
+    if (btnClearLogs) {
+        btnClearLogs.addEventListener('click', async () => {
+            if (confirm("Are you sure you want to PERMANENTLY delete ALL log entries?")) {
+                await remove(ref(db, 'logs'));
+                alert("All logs cleared successfully!");
+            }
+        });
+    }
 });
 
 // Fetch Users logic mapped globally
@@ -313,6 +374,7 @@ window.listenToLogs = function() {
             if(actionText === 'UNLOCK') actionBadge = '<span class="badge success">UNLOCKED</span>';
             else if(actionText === 'LOCK') actionBadge = '<span class="badge warning" style="background:rgba(59,130,246,0.1); color:#3b82f6;">LOCKED</span>';
             else if(actionText === 'INTRUDER_ALARM') actionBadge = '<span class="badge danger" style="animation: pulse 1s infinite;">INTRUDER</span>';
+            else if(actionText === 'ALARM_RESET' || actionText === 'SYSTEM') actionBadge = '<span class="badge info" style="background:rgba(16,185,129,0.1); color:#10b981;">SYSTEM</span>';
             else actionBadge = '<span class="badge danger">DENIED</span>';
 
             const tr = document.createElement('tr');
@@ -323,6 +385,9 @@ window.listenToLogs = function() {
                 <td style="text-transform: capitalize;">${log.type}</td>
                 <td>${actionBadge}</td>
                 <td>${log.message}</td>
+                <td>
+                    <button class="btn btn-danger" onclick="window.deleteLog('${log.id}')" style="padding: 4px 8px; font-size: 12px;">Delete</button>
+                </td>
             `;
             tbody.appendChild(tr);
         });
@@ -331,6 +396,12 @@ window.listenToLogs = function() {
         if(document.getElementById('stat-allowed')) document.getElementById('stat-allowed').innerText = allowedCount;
         if(document.getElementById('stat-denied')) document.getElementById('stat-denied').innerText = deniedCount;
     });
+}
+
+window.deleteLog = async function(logId) {
+    if(confirm("Are you sure you want to delete this specific log entry?")) {
+        await remove(ref(db, 'logs/' + logId));
+    }
 }
 
 window.deleteUser = async function(uid) {

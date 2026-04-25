@@ -66,6 +66,12 @@
             <div class="view-content">
                 <!-- Dashboard View -->
                 <section id="dashboard" class="view-section active">
+                    <div class="section-header" style="justify-content: space-between; align-items: center; margin-bottom: 20px; display: flex;">
+                        <h2 style="margin: 0;">System Overview</h2>
+                        <button class="btn btn-primary" id="btn-manual-unlock" style="background-color: var(--warning); color: #000; font-weight: bold;">
+                            <ion-icon name="lock-open-outline"></ion-icon> Admin Manual Unlock
+                        </button>
+                    </div>
                     <div class="stats-grid">
                         <div class="stat-card">
                             <div class="stat-icon"><ion-icon name="people"></ion-icon></div>
@@ -99,9 +105,6 @@
                             <button class="btn btn-warning" id="btn-remote-enroll" style="background-color: var(--warning); color: #000;">
                                 <ion-icon name="finger-print-outline"></ion-icon> Remote OTA Fingerprint
                             </button>
-                            <button class="btn btn-secondary" id="btn-remote-rfid">
-                                <ion-icon name="card-outline"></ion-icon> Scan RFID on Door
-                            </button>
                             <button class="btn btn-primary" id="btn-add-user">
                                 <ion-icon name="add-outline"></ion-icon> Add Final User
                             </button>
@@ -132,9 +135,14 @@
                 <section id="logs" class="view-section">
                     <div class="section-header">
                         <h2>Access Tracker Logs</h2>
-                        <button class="btn btn-secondary" id="btn-refresh-logs">
-                            <ion-icon name="refresh-outline"></ion-icon> Refresh
-                        </button>
+                        <div style="display:flex; gap:10px;">
+                            <button class="btn btn-secondary" id="btn-refresh-logs">
+                                <ion-icon name="refresh-outline"></ion-icon> Refresh
+                            </button>
+                            <button class="btn btn-danger" id="btn-clear-logs">
+                                <ion-icon name="trash-outline"></ion-icon> Clear All
+                            </button>
+                        </div>
                     </div>
                     <div class="table-container">
                         <table class="data-table">
@@ -146,6 +154,7 @@
                                     <th><ion-icon name="hardware-chip-outline" style="vertical-align: middle;"></ion-icon> Method</th>
                                     <th><ion-icon name="flag-outline" style="vertical-align: middle;"></ion-icon> Status</th>
                                     <th><ion-icon name="chatbox-ellipses-outline" style="vertical-align: middle;"></ion-icon> Message</th>
+                                    <th><ion-icon name="settings-outline" style="vertical-align: middle;"></ion-icon> Actions</th>
                                 </tr>
                             </thead>
                             <tbody id="logs-table-body">
@@ -196,7 +205,12 @@
                 <form id="user-form">
                     <div class="form-row mobile-col">
                         <div class="form-group">
-                            <label>Primary UID (RFID Hex / Fingerprint ID)</label>
+                            <label style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 5px;">
+                                <span style="font-size:13px;">Primary UID (RFID Hex / ID)</span>
+                                <button type="button" class="btn btn-secondary" id="btn-remote-rfid" style="padding: 2px 8px; font-size: 11px; margin-bottom: 2px;">
+                                    <ion-icon name="wifi-outline"></ion-icon> Scan Card directly
+                                </button>
+                            </label>
                             <div class="input-with-icon">
                                 <ion-icon name="keypad-outline"></ion-icon>
                                 <input type="text" id="inp-uid" required placeholder="e.g. 1A2B3C4D or 2">
@@ -270,6 +284,20 @@
                         <button type="button" class="btn btn-secondary close-modal">Cancel</button>
                     </div>
                 </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Intruder Alarm Overlay -->
+    <div class="modal-overlay" id="alarm-overlay" style="background: rgba(255,0,0,0.85); z-index: 9999;">
+        <div class="modal-card" style="text-align: center; border: 4px solid darkred;">
+            <ion-icon name="warning" class="pulse-icon" style="font-size: 80px; color: var(--danger);"></ion-icon>
+            <h1 style="color: var(--danger); margin: 20px 0; font-size: 32px; text-transform: uppercase;">Intruder Alert!!</h1>
+            <p style="font-size: 18px; line-height: 1.5; color: var(--text-main);">The door was forcefully opened from the physical sensors while the system was armed and locked! Please check your premises.</p>
+            <div class="form-actions" style="margin-top: 30px; justify-content: center;">
+                <button id="btn-reset-alarm" class="btn btn-primary" style="background: var(--danger); font-size: 20px; padding: 15px 30px; border:none; color:white;">
+                    <ion-icon name="power-outline"></ion-icon> RESET ALARM SYSTEM
+                </button>
             </div>
         </div>
     </div>
