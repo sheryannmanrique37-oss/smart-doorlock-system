@@ -7,13 +7,13 @@ import { getDatabase } from "https://www.gstatic.com/firebasejs/10.9.0/firebase-
 // Replace the config below with your actual Firebase Web SDK details
 // ============================================
 export const firebaseConfig = {
-  apiKey: "AIzaSyA7muUhSiZayLr68WW-AxCkuqxp_hw2lIQ",
-  authDomain: "power-outlet-5465c.firebaseapp.com",
-  databaseURL: "https://power-outlet-5465c-default-rtdb.asia-southeast1.firebasedatabase.app",
-  projectId: "power-outlet-5465c",
-  storageBucket: "power-outlet-5465c.firebasestorage.app",
-  messagingSenderId: "523246709275",
-  appId: "1:523246709275:web:05d7f6ae5c275c8a8866be"
+  apiKey: "AIzaSyDCg7yfWQJcEO1RWFfOelTPrZmIojn1v7w",
+  authDomain: "smart-doorlock-system.firebaseapp.com",
+  databaseURL: "https://smart-doorlock-system-default-rtdb.asia-southeast1.firebasedatabase.app",
+  projectId: "smart-doorlock-system",
+  storageBucket: "smart-doorlock-system.firebasestorage.app",
+  messagingSenderId: "566488612508",
+  appId: "1:566488612508:web:41c810eced6e23670fb759"
 };
 
 // Initialize Firebase Export Variables
