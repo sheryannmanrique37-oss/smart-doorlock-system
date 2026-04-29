@@ -7,13 +7,13 @@ import { getDatabase } from "https://www.gstatic.com/firebasejs/10.9.0/firebase-
 // Replace the config below with your actual Firebase Web SDK details
 // ============================================
 export const firebaseConfig = {
-  apiKey: "AIzaSyDCg7yfWQJcEO1RWFfOelTPrZmIojn1v7w",
+   apiKey: "AIzaSyDCg7yfWQJcEO1RWFfOelTPrZmIojn1v7w",
   authDomain: "smart-doorlock-system.firebaseapp.com",
   databaseURL: "https://smart-doorlock-system-default-rtdb.asia-southeast1.firebasedatabase.app",
   projectId: "smart-doorlock-system",
   storageBucket: "smart-doorlock-system.firebasestorage.app",
   messagingSenderId: "566488612508",
-  appId: "1:566488612508:web:41c810eced6e23670fb759"
+  appId: "1:566488612508:web:41c810eced6e23670fb759""
 
 };
 
