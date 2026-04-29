@@ -13,7 +13,7 @@ export const firebaseConfig = {
   projectId: "smart-doorlock-system",
   storageBucket: "smart-doorlock-system.firebasestorage.app",
   messagingSenderId: "566488612508",
-  appId: "1:566488612508:web:41c810eced6e23670fb759""
+  appId: "1:566488612508:web:41c810eced6e23670fb759"
 
 };
 
